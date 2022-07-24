@@ -10,7 +10,7 @@ services:
     ports:
       - "3307:3306"
   nginx:
-    image: nnm_nginx
+    image: dockerize_nginx_node_mysql_nginx
     depends_on:
       - api
       - client
@@ -26,7 +26,7 @@ services:
   api:
     working_dir: /var/www/html
     container_name: server
-    image: nnm_api
+    image: dockerize_nginx_node_mysql_api
     build:
       dockerfile: Dockerfile.dev
       context: ./server
@@ -39,7 +39,7 @@ services:
   client:
     working_dir: /var/www/html
     container_name: client
-    image: nnm_client
+    image: dockerize_nginx_node_mysql_client
     stdin_open: true
     build:
       dockerfile: Dockerfile.dev
