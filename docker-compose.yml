@@ -1,0 +1,60 @@
+version: "3"
+services:
+  mysql:
+    image: "mysql:8.0-oracle"
+    container_name: mysql
+    restart: 'on-failure'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nginx_node_mysql
+    ports:
+      - "3307:3306"
+  nginx:
+    image: nnm_nginx
+    depends_on:
+      - api
+      - client
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - "80:80"
+    networks:
+      app_network:
+        ipv4_address: 172.12.0.3
+  api:
+    working_dir: /var/www/html
+    container_name: server
+    image: nnm_api
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server
+    volumes:
+      - /var/www/html/node_modules
+      - ./server:/var/www/html
+    networks:
+      app_network:
+        ipv4_address: 172.12.0.4
+  client:
+    working_dir: /var/www/html
+    container_name: client
+    image: nnm_client
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client
+    volumes:
+      - /var/www/html/node_modules
+      - ./client:/var/www/html
+    networks:
+      app_network:
+        ipv4_address: 172.12.0.5
+      
+networks:
+  app_network:
+    name: app_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.12.0.0/16

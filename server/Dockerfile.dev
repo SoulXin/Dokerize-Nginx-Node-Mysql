@@ -1,0 +1,13 @@
+FROM node:16-alpine3.15
+
+EXPOSE 5000
+
+WORKDIR /var/www/html
+
+COPY ./package.json ./
+
+RUN npm install
+
+COPY . .
+
+CMD ["npm", "run", "dev"]
