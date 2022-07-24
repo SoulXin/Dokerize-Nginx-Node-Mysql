@@ -7,5 +7,5 @@ up:
 
 down: 
 	docker-compose -p dockerize-nginx-node-mysql-container down
-	docker rmi -f nnm_api  nnm_client  nnm_nginx
+	docker rmi -f dockerize_nginx_node_mysql_client  dockerize_nginx_node_mysql_nginx  dockerize_nginx_node_mysql_api
 	docker volume prune -f
